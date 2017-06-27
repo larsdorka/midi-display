@@ -22,9 +22,12 @@ def init():
     #initialize midi
     global MIDIDATA, MIDIACTIVE, MIDIDEVICE
     pygame.midi.init()
-    inputId = pygame.midi.get_default_input_id()
-    if inputId >= 0:
-        MIDIDEVICE = pygame.midi.Input(inputId)
+    midiDeviceCount = pygame.midi.get_count()
+    for i in range(midiDeviceCount):
+            print (pygame.midi.get_device_info(i))
+    defaultInputId = pygame.midi.get_default_input_id()
+    if defaultInputId >= 0:
+        MIDIDEVICE = pygame.midi.Input(defaultInputId)
         MIDIACTIVE = True
     else:
         print("ERROR: no midi device found!")
