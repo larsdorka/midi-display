@@ -1,19 +1,27 @@
 import pygame, sys, time
+import pygame.midi
 from pygame.locals import *
 
 
 #initilization
 def init():
-    global DISPLAYSURFACE, BIGFONT
+    global DISPLAYSURFACE, BIGFONT, MIDIDATA, MIDIACTIVE, MIDIDEVICE
     pygame.init()
     DISPLAYSURFACE = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     BIGFONT = pygame.font.Font('freesansbold.ttf', 200)
     print(pygame.font.get_default_font())
-    global MIDIDATA
     MIDIDATA = []
     for index in range(128):
         MIDIDATA.append(0)
     MIDIDATA[127] = 63
+    pygame.midi.init()
+    inputId = pygame.midi.get_default_input_id()
+    if inputId >= 0:
+        MIDIDEVICE = pygame.midi.Input(inputId)
+        MIDIACTIVE = True
+    else:
+        print("ERROR: no midi device found!")
+        MIDIACTIVE = False
         
 
 #main application loop
@@ -24,6 +32,8 @@ def main():
     while True:
         time.sleep(0.1)
         checkForExit()
+        if MIDIACTIVE:
+            readMidiInput()
         new_number = calcNumber()
         if new_number != old_number:
             DISPLAYSURFACE.fill((0,0,0))
@@ -36,6 +46,14 @@ def main():
             old_number = new_number
         pygame.display.update()
         loopCounter += 1
+
+
+#read midi input
+def readMidiInput():
+    midiInputData = []
+    while MIDIDEVICE.poll():
+        midiInputData.append(MIDIDEVICE.read(1))
+    print (midiInputData)
 
 
 #calculate 'the number'
