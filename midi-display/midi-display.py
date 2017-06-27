@@ -2,18 +2,25 @@ import pygame, sys, time
 import pygame.midi
 from pygame.locals import *
 
+#configuration constants
+FULLSCREEN = False
 
-#initilization
+
+#initialization
 def init():
-    global DISPLAYSURFACE, BIGFONT, MIDIDATA, MIDIACTIVE, MIDIDEVICE
+    #initialize screen
+    global DISPLAYSURFACE, BIGFONT, DISPLAYHEIGHT, DISPLAYWIDTH
     pygame.init()
-    DISPLAYSURFACE = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-    BIGFONT = pygame.font.Font('freesansbold.ttf', 200)
+    if FULLSCREEN:
+        DISPLAYSURFACE = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    else:
+        DISPLAYSURFACE = pygame.display.set_mode((1024, 768))
+    DISPLAYWIDTH = DISPLAYSURFACE.get_width()
+    DISPLAYHEIGHT = DISPLAYSURFACE.get_height()
+    BIGFONT = pygame.font.Font('freesansbold.ttf', DISPLAYHEIGHT // 5)
     print(pygame.font.get_default_font())
-    MIDIDATA = []
-    for index in range(128):
-        MIDIDATA.append(0)
-    MIDIDATA[127] = 63
+    #initialize midi
+    global MIDIDATA, MIDIACTIVE, MIDIDEVICE
     pygame.midi.init()
     inputId = pygame.midi.get_default_input_id()
     if inputId >= 0:
@@ -22,6 +29,10 @@ def init():
     else:
         print("ERROR: no midi device found!")
         MIDIACTIVE = False
+    MIDIDATA = []
+    for index in range(128):
+        MIDIDATA.append(0)
+    MIDIDATA[127] = 63
         
 
 #main application loop
@@ -38,10 +49,10 @@ def main():
         if new_number != old_number:
             DISPLAYSURFACE.fill((0,0,0))
             if new_number != 0:
-                displayText = BIGFONT.render(str(loopCounter).zfill(5), True, calcColor(), (0,0,0))
-                #displayText = BIGFONT.render(str(new_number).zfill(5), True, (255,255,255), (0,0,0))
+                displayText = BIGFONT.render(str(loopCounter).zfill(5), True, calcColor(), (0, 0, 0))
+                #displayText = BIGFONT.render(str(new_number).zfill(5), True, (255, 255, 255), (0, 0, 0))
                 displayRect = displayText.get_rect()
-                displayRect.center = (960,540)
+                displayRect.center = (DISPLAYWIDTH // 2, DISPLAYHEIGHT // 2)
                 DISPLAYSURFACE.blit(displayText, displayRect)
             old_number = new_number
         pygame.display.update()
@@ -95,3 +106,4 @@ def checkForExit():
 if __name__ == '__main__':
     init()
     main()
+    
