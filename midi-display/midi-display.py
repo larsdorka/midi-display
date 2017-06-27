@@ -23,10 +23,11 @@ def init():
     global MIDIDATA, MIDIACTIVE, MIDIDEVICE
     pygame.midi.init()
     midiDeviceCount = pygame.midi.get_count()
-    for i in range(midiDeviceCount):
-            print (pygame.midi.get_device_info(i))
+    #for i in range(midiDeviceCount):
+    #        print (pygame.midi.get_device_info(i))
     defaultInputId = pygame.midi.get_default_input_id()
     if defaultInputId >= 0:
+        print (pygame.midi.get_device_info(defaultInputId))
         MIDIDEVICE = pygame.midi.Input(defaultInputId)
         MIDIACTIVE = True
     else:
@@ -67,7 +68,8 @@ def readMidiInput():
     midiInputData = []
     while MIDIDEVICE.poll():
         midiInputData.append(MIDIDEVICE.read(1))
-    print (midiInputData)
+    if midiInputData != []:
+        print (midiInputData)
 
 
 #calculate 'the number'
