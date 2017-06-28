@@ -53,8 +53,8 @@ def main():
         if new_number != old_number:
             DISPLAYSURFACE.fill((0,0,0))
             if new_number != 0:
-                #displayText = BIGFONT.render(str(loopCounter).zfill(5), True, calcColor(), (0, 0, 0))
-                displayText = BIGFONT.render(str(new_number).zfill(5), True, (255, 255, 255), (0, 0, 0))
+                #displayText = BIGFONT.render(str(loopCounter).zfill(5), True, (255, 255, 255), (0, 0, 0))
+                displayText = BIGFONT.render(str(new_number).zfill(5), True, calcColor(), (0, 0, 0))
                 displayRect = displayText.get_rect()
                 displayRect.center = (DISPLAYWIDTH // 2, DISPLAYHEIGHT // 2)
                 DISPLAYSURFACE.blit(displayText, displayRect)
