@@ -36,12 +36,12 @@ def init():
     MIDIDATA = []
     for index in range(128):
         MIDIDATA.append(0)
-    MIDIDATA[127] = 63
+    #MIDIDATA[127] = 63
         
 
 #main application loop
 def main():
-    loopCounter = 0
+    #loopCounter = 0
     old_number = 0
     new_number = 0
     while True:
@@ -53,14 +53,14 @@ def main():
         if new_number != old_number:
             DISPLAYSURFACE.fill((0,0,0))
             if new_number != 0:
-                displayText = BIGFONT.render(str(loopCounter).zfill(5), True, calcColor(), (0, 0, 0))
-                #displayText = BIGFONT.render(str(new_number).zfill(5), True, (255, 255, 255), (0, 0, 0))
+                #displayText = BIGFONT.render(str(loopCounter).zfill(5), True, calcColor(), (0, 0, 0))
+                displayText = BIGFONT.render(str(new_number).zfill(5), True, (255, 255, 255), (0, 0, 0))
                 displayRect = displayText.get_rect()
                 displayRect.center = (DISPLAYWIDTH // 2, DISPLAYHEIGHT // 2)
                 DISPLAYSURFACE.blit(displayText, displayRect)
             old_number = new_number
         pygame.display.update()
-        loopCounter += 1
+        #loopCounter += 1
 
 
 #read midi input
@@ -69,7 +69,16 @@ def readMidiInput():
     while MIDIDEVICE.poll():
         midiInputData.append(MIDIDEVICE.read(1))
     if midiInputData != []:
-        print (midiInputData)
+        #print (midiInputData)
+        for message in midiInputData:
+            print (message)
+            if len(message) > 0:
+                if len(message[0]) > 0:
+                    status = message[0][0][0] & 240
+                    key = message[0][0][1]
+                    velocity = message[0][0][2]
+                    print ("status: {}, key: {}, velocity: {}".format(status, key, velocity))
+                    MIDIDATA[key] = velocity
 
 
 #calculate 'the number'
