@@ -1,14 +1,16 @@
-import pygame, sys, time
+import pygame
+import sys
+import time
 from pygame.locals import *
 
 import midiInput, codeGenerator, displayRenderer
 
-#configuration constants
+# configuration constants
 FULLSCREEN = False
 MIDIDEVICEID = -1
 
 
-#exit application
+# exit application
 def checkForExit():
     for event in pygame.event.get(KEYUP):
             if event.key == K_ESCAPE:
@@ -16,7 +18,7 @@ def checkForExit():
                 sys.exit()
                 
 
-#main application loop
+# main application loop
 if __name__ == '__main__':
     pygame.init()
     display = displayRenderer.DisplayRenderer()
@@ -24,7 +26,7 @@ if __name__ == '__main__':
     midi = midiInput.MidiInput()
     midi.open(MIDIDEVICEID)
     codeGen = codeGenerator.CodeGenerator()
-    #codeGen.algorithm = "counter"
+    # codeGen.algorithm = "counter"
     old_number = 0
     new_number = 0
     while True:
@@ -35,6 +37,5 @@ if __name__ == '__main__':
         new_number = codeGen.calcNumber(midi.midiData)
         if new_number != old_number:
             display.renderNumber(new_number, codeGen.calcColor(midi.midiData))
-            #display.renderNumber(new_number)
+            # display.renderNumber(new_number)
             old_number = new_number
-    
