@@ -6,11 +6,11 @@ class CodeGenerator:
         self.calculateColor = True
         self.counter = 0
 
-    def calcNumber(self, midiData):
+    def calc_number(self, midi_data):
         number = 0
         if self.algorithm == "default":
             for index in range(128):
-                if midiData[index] > 0:
+                if midi_data[index] > 0:
                     number += 2 ** (index % 16)
             number %= 100000
         elif self.algorithm == "counter":
@@ -20,19 +20,19 @@ class CodeGenerator:
             number = 0
         return number
 
-    def calcColor(self, midiData):
+    def calc_color(self, midi_data):
         if self.calculateColor is False:
             return (255, 255, 255)
         color = 0
-        keyCounter = 0
+        key_counter = 0
         for index in range(128):
-            if midiData[index] > 0:
-                keyCounter += 1
-                color += midiData[index] * 2
-        print(keyCounter)
-        if keyCounter == 0:
+            if midi_data[index] > 0:
+                key_counter += 1
+                color += midi_data[index] * 2
+        print(key_counter)
+        if key_counter == 0:
             return (0, 0, 0)
-        color = color // keyCounter
+        color = color // key_counter
         color = min(color, 255)
         print(color)
         return (color, color, color)
