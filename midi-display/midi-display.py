@@ -3,7 +3,9 @@ import sys
 import time
 from pygame.locals import *
 
-import midiInput, codeGenerator, displayRenderer
+import midiInput
+import codeGenerator
+import displayRenderer
 
 # configuration constants
 FULLSCREEN = False
