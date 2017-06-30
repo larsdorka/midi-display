@@ -1,8 +1,7 @@
 import pygame, sys, time
-import pygame.midi
 from pygame.locals import *
 
-import midiInput
+import midiInput, codeGenerator
 
 #configuration constants
 FULLSCREEN = False
@@ -23,33 +22,6 @@ def init():
     #print(pygame.font.get_default_font())
 
 
-#calculate 'the number'
-def calcNumber():
-    number = 0
-    for index in range(128):
-        if midi.midiData[index] > 0:
-            number += 2 ** (index % 16)
-    number %= 100000
-    return number
-
-
-#calculate the velocity color
-def calcColor():
-    color = 0
-    keyCounter = 0
-    for index in range(128):
-        if midi.midiData[index] > 0:
-            keyCounter += 1
-            color += midi.midiData[index] * 2
-    print (keyCounter)
-    if keyCounter == 0:
-        return (0, 0, 0)
-    color = color // keyCounter
-    color = min(color, 255)
-    print (color)
-    return (color, color, color)
-
-
 #exit application
 def checkForExit():
     for event in pygame.event.get(KEYUP):
@@ -63,6 +35,7 @@ if __name__ == '__main__':
     init()
     midi = midiInput.MidiInput()
     midi.open()
+    codeGen = codeGenerator.CodeGenerator()
     #loopCounter = 0
     old_number = 0
     new_number = 0
@@ -71,12 +44,12 @@ if __name__ == '__main__':
         checkForExit()
         if midi.connected:
             midi.readData()
-        new_number = calcNumber()
+        new_number = codeGen.calcNumber(midi.midiData)
         if new_number != old_number:
             DISPLAYSURFACE.fill((0,0,0))
             if new_number != 0:
                 #displayText = BIGFONT.render(str(loopCounter).zfill(5), True, (255, 255, 255), (0, 0, 0))
-                displayText = BIGFONT.render(str(new_number).zfill(5), True, calcColor(), (0, 0, 0))
+                displayText = BIGFONT.render(str(new_number).zfill(5), True, codeGen.calcColor(midi.midiData), (0, 0, 0))
                 displayRect = displayText.get_rect()
                 displayRect.center = (DISPLAYWIDTH // 2, DISPLAYHEIGHT // 2)
                 DISPLAYSURFACE.blit(displayText, displayRect)
