@@ -1,25 +1,11 @@
 import pygame, sys, time
 from pygame.locals import *
 
-import midiInput, codeGenerator
+import midiInput, codeGenerator, displayRenderer
 
 #configuration constants
 FULLSCREEN = False
-
-
-#initialization
-def init():
-    #initialize screen
-    global DISPLAYSURFACE, BIGFONT, DISPLAYHEIGHT, DISPLAYWIDTH
-    pygame.init()
-    if FULLSCREEN:
-        DISPLAYSURFACE = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-    else:
-        DISPLAYSURFACE = pygame.display.set_mode((1024, 768))
-    DISPLAYWIDTH = DISPLAYSURFACE.get_width()
-    DISPLAYHEIGHT = DISPLAYSURFACE.get_height()
-    BIGFONT = pygame.font.Font('freesansbold.ttf', DISPLAYHEIGHT // 5)
-    #print(pygame.font.get_default_font())
+MIDIDEVICEID = -1
 
 
 #exit application
@@ -30,12 +16,15 @@ def checkForExit():
                 sys.exit()
                 
 
-#run application loop
+#main application loop
 if __name__ == '__main__':
-    init()
+    pygame.init()
+    display = displayRenderer.DisplayRenderer()
+    display.open()
     midi = midiInput.MidiInput()
-    midi.open()
+    midi.open(MIDIDEVICEID)
     codeGen = codeGenerator.CodeGenerator()
+    #codeGen.algorithm = "counter"
     old_number = 0
     new_number = 0
     while True:
@@ -45,12 +34,7 @@ if __name__ == '__main__':
             midi.readData()
         new_number = codeGen.calcNumber(midi.midiData)
         if new_number != old_number:
-            DISPLAYSURFACE.fill((0,0,0))
-            if new_number != 0:
-                displayText = BIGFONT.render(str(new_number).zfill(5), True, codeGen.calcColor(midi.midiData), (0, 0, 0))
-                displayRect = displayText.get_rect()
-                displayRect.center = (DISPLAYWIDTH // 2, DISPLAYHEIGHT // 2)
-                DISPLAYSURFACE.blit(displayText, displayRect)
+            display.renderNumber(new_number, codeGen.calcColor(midi.midiData))
+            #display.renderNumber(new_number)
             old_number = new_number
-        pygame.display.update()
     
