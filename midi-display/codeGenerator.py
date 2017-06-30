@@ -4,6 +4,7 @@ class CodeGenerator:
     def __init__(self):
         self.algorithm = "default"
         self.calculateColor = True
+        self.counter = 0
         
     
     def calcNumber(self, midiData):
@@ -13,6 +14,11 @@ class CodeGenerator:
                 if midiData[index] > 0:
                     number += 2 ** (index % 16)
             number %= 100000
+        elif self.algorithm == "counter":
+            number = self.counter
+            self.counter += 1
+        else:
+            number = 0
         return number
 
 

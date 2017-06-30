@@ -36,7 +36,6 @@ if __name__ == '__main__':
     midi = midiInput.MidiInput()
     midi.open()
     codeGen = codeGenerator.CodeGenerator()
-    #loopCounter = 0
     old_number = 0
     new_number = 0
     while True:
@@ -48,12 +47,10 @@ if __name__ == '__main__':
         if new_number != old_number:
             DISPLAYSURFACE.fill((0,0,0))
             if new_number != 0:
-                #displayText = BIGFONT.render(str(loopCounter).zfill(5), True, (255, 255, 255), (0, 0, 0))
                 displayText = BIGFONT.render(str(new_number).zfill(5), True, codeGen.calcColor(midi.midiData), (0, 0, 0))
                 displayRect = displayText.get_rect()
                 displayRect.center = (DISPLAYWIDTH // 2, DISPLAYHEIGHT // 2)
                 DISPLAYSURFACE.blit(displayText, displayRect)
             old_number = new_number
         pygame.display.update()
-        #loopCounter += 1
     
