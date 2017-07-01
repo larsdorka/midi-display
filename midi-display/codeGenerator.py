@@ -7,6 +7,7 @@ class CodeGenerator:
         self.counter = 0
 
     def calc_number(self, midi_data):
+        """calculates a number from the midi data using the set algorithm"""
         number = 0
         if self.algorithm == "default":
             for index in range(128):
@@ -21,6 +22,7 @@ class CodeGenerator:
         return number
 
     def calc_color(self, midi_data):
+        """calculates the text color from the midi data"""
         if self.calculateColor is False:
             return (255, 255, 255)
         color = 0

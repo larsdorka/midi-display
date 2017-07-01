@@ -8,8 +8,9 @@ import codeGenerator
 import displayRenderer
 
 # configuration constants
-FULL_SCREEN = False
-MIDI_DEVICE_ID = -1
+FULL_SCREEN = False     # set to False to display in 1024/768 window
+MIDI_DEVICE_ID = -1     # set to -1 to use default device
+SHOW_DEBUG = False      # set to True to render debug info on the screen
 
 
 # main application loop

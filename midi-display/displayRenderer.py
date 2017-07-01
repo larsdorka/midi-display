@@ -13,6 +13,7 @@ class DisplayRenderer:
         self.display_height = 0
         
     def open(self, full_screen=False, render_zero=False):
+        """initializes the screen and render objects"""
         self.full_screen = full_screen
         self.render_zero = render_zero
         if self.full_screen:
@@ -24,6 +25,7 @@ class DisplayRenderer:
         self.big_font = pygame.font.Font('freesansbold.ttf', self.display_height // 5)
     
     def render_number(self, number, color=(255, 255, 255)):
+        """renders a number in a large font in the center of the screen"""
         self.display_surface.fill((0, 0, 0))
         if number != 0 or self.render_zero is True:
             display_text = self.big_font.render(str(number).zfill(5), True, color, (0, 0, 0))

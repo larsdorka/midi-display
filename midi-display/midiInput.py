@@ -13,6 +13,7 @@ class MidiInput:
         self.clear_data()
         
     def open(self, device_id=-1):
+        """initializes the given midi input device or the standard device"""
         if self.midiDevice is not None:
             self.midiDevice.close()
             self.midiDevice = None
@@ -30,25 +31,28 @@ class MidiInput:
                 self.connected = False
 
     def clear_data(self):
+        """clears the midi data store"""
         self.midiData = []
         for index in range(128):
             self.midiData.append(0)
 
     def read_data(self):
-            midi_messages = []
-            while self.midiDevice.poll():
-                midi_messages.append(self.midiDevice.read(1))
-            if midi_messages is not []:
-                for message in midi_messages:
-                    print(message)
-                    if len(message) > 0:
-                        if len(message[0]) > 0:
-                            status = message[0][0][0] & 240
-                            key = message[0][0][1]
-                            velocity = message[0][0][2]
-                            print("status: {}, key: {}, velocity: {}".format(status, key, velocity))
-                            self.midiData[key] = velocity
+        """reads midi input data and stores the key/velocity data in the midi data store"""
+        midi_messages = []
+        while self.midiDevice.poll():
+            midi_messages.append(self.midiDevice.read(1))
+        if midi_messages is not []:
+            for message in midi_messages:
+                print(message)
+                if len(message) > 0:
+                    if len(message[0]) > 0:
+                        status = message[0][0][0] & 240
+                        key = message[0][0][1]
+                        velocity = message[0][0][2]
+                        print("status: {}, key: {}, velocity: {}".format(status, key, velocity))
+                        self.midiData[key] = velocity
 
     def close(self):
+        """closes the midi input device"""
         if self.midiDevice is not None:
             self.midiDevice.close()
