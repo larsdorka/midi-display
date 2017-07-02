@@ -21,7 +21,7 @@ if __name__ == '__main__':
     midi = midiInput.MidiInput()
     midi.open(MIDI_DEVICE_ID)
     codeGen = codeGenerator.CodeGenerator()
-    # codeGen.algorithm = "counter"
+    # codeGen = codeGenerator.CodeGenerator(codeGenerator.Algorithm.COUNTER)
     old_number = 0
     new_number = 0
     while True:

@@ -1,20 +1,29 @@
+from enum import Enum, auto
+
+
+class Algorithm(Enum):
+    """enum to contain all the possible generator algorithms"""
+    DEFAULT = auto()
+    COUNTER = auto()
+
+
 class CodeGenerator:
     """class to generate numbers and colors from midi data"""
     
-    def __init__(self):
-        self.algorithm = "default"
+    def __init__(self, algorithm=Algorithm.DEFAULT):
+        self.algorithm = algorithm
         self.calculateColor = True
         self.counter = 0
 
     def calc_number(self, midi_data):
         """calculates a number from the midi data using the set algorithm"""
         number = 0
-        if self.algorithm == "default":
+        if self.algorithm == Algorithm.DEFAULT:
             for index in range(128):
                 if midi_data[index] > 0:
                     number += 2 ** (index % 16)
             number %= 100000
-        elif self.algorithm == "counter":
+        elif self.algorithm == Algorithm.COUNTER:
             number = self.counter
             self.counter += 1
         else:
