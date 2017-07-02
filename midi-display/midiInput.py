@@ -4,29 +4,42 @@ import pygame.midi
 
 class MidiInput:
     """class for handling all the midi input data"""
-    
-    def __init__(self):
+
+    def __init__(self, debug_log=dict()):
+        self.debug_log = debug_log
         self.midiData = None
         self.connected = False
         self.midiDevice = None
         pygame.midi.init()
         self.clear_data()
-        
+
     def open(self, device_id=-1):
         """initializes the given midi input device or the standard device"""
+        self.debug_log['midi'] = ""
         if self.midiDevice is not None:
             self.midiDevice.close()
             self.midiDevice = None
+        self.connected = False
         if device_id >= 0:
-            self.midiDevice = pygame.midi.Input(device_id)
+            try:
+                self.midiDevice = pygame.midi.Input(device_id)
+            except pygame.midi.MidiException as ex:
+                self.debug_log['midi'] = "error opening midi device: " + str(ex)
+            else:
+                self.debug_log['midi'] = "midi device: " + str(pygame.midi.get_device_info(device_id)[1])
+                self.connected = True
         else:
             default_input_id = pygame.midi.get_default_input_id()
             if default_input_id >= 0:
-                print(pygame.midi.get_device_info(default_input_id))
-                self.midiDevice = pygame.midi.Input(default_input_id)
-                self.connected = True
+                try:
+                    self.midiDevice = pygame.midi.Input(default_input_id)
+                except pygame.midi.MidiException as ex:
+                    self.debug_log['midi'] = "error opening midi device: " + str(ex)
+                else:
+                    self.debug_log['midi'] = "midi device: " + str(pygame.midi.get_device_info(default_input_id)[1])
+                    self.connected = True
             else:
-                print("ERROR: no midi default device found!")
+                self.debug_log['midi'] = "no midi default device found"
                 self.midiDevice = None
                 self.connected = False
 
