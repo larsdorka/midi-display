@@ -33,8 +33,11 @@ if __name__ == '__main__':
                 sys.exit()
         if midi.connected:
             midi.read_data()
+        if SHOW_DEBUG:
+            display.render_state()
         new_number = codeGen.calc_number(midi.midiData)
         if new_number != old_number:
             display.render_number(new_number, codeGen.calc_color(midi.midiData))
             # display.renderNumber(new_number)
             old_number = new_number
+        display.update()
