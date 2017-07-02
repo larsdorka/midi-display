@@ -23,8 +23,7 @@ if __name__ == '__main__':
     midi.open(MIDI_DEVICE_ID)
     codeGen = codeGenerator.CodeGenerator()
     # codeGen = codeGenerator.CodeGenerator(codeGenerator.Algorithm.COUNTER)
-    old_number = 0
-    new_number = 0
+    number = 0
     while True:
         time.sleep(0.1)
         for event in pygame.event.get(KEYUP):
@@ -35,11 +34,10 @@ if __name__ == '__main__':
         if midi.connected:
             midi.read_data()
         if SHOW_DEBUG:
-            debug_log['midi_connected'] = midi.connected
+            debug_log['midi_connected'] = str(midi.connected)
             display.render_state()
-        new_number = codeGen.calc_number(midi.midiData)
-        if new_number != old_number:
-            display.render_number(new_number, codeGen.calc_color(midi.midiData))
-            # display.renderNumber(new_number)
-            old_number = new_number
+        number = codeGen.calc_number(midi.midiData)
+        number = codeGen.calc_number(midi.midiData)
+        display.render_number(number, codeGen.calc_color(midi.midiData))
+        # display.renderNumber(new_number)
         display.update()

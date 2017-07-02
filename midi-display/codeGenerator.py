@@ -40,10 +40,8 @@ class CodeGenerator:
             if midi_data[index] > 0:
                 key_counter += 1
                 color += midi_data[index] * 2
-        print(key_counter)
         if key_counter == 0:
             return (0, 0, 0)
         color = color // key_counter
         color = min(color, 255)
-        print(color)
         return (color, color, color)

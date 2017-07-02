@@ -16,6 +16,8 @@ class MidiInput:
     def open(self, device_id=-1):
         """initializes the given midi input device or the standard device"""
         self.debug_log['midi'] = ""
+        self.debug_log['midi_connected'] = ""
+        self.debug_log['midi_message'] = ""
         if self.midiDevice is not None:
             self.midiDevice.close()
             self.midiDevice = None
@@ -52,20 +54,28 @@ class MidiInput:
     def read_data(self):
         """reads midi input data and stores the key/velocity data in the midi data store"""
         midi_messages = []
-        while self.midiDevice.poll():
-            midi_messages.append(self.midiDevice.read(1))
+        try:
+            while self.midiDevice.poll():
+                midi_messages.append(self.midiDevice.read(1))
+        except pygame.midi.MidiException as ex:
+            self.debug_log['midi'] = "error reading midi device: " + str(ex)
         if midi_messages is not []:
             for message in midi_messages:
-                print(message)
                 if len(message) > 0:
                     if len(message[0]) > 0:
                         status = message[0][0][0] & 240
+                        channel = (message[0][0][0] & 15) + 1
                         key = message[0][0][1]
                         velocity = message[0][0][2]
-                        print("status: {}, key: {}, velocity: {}".format(status, key, velocity))
+                        self.debug_log['midi_message'] = ("last message: "
+                                                          "status: {}, channel: {}, key: {}, "
+                                                          "velocity: {}".format(status, channel, key, velocity))
                         self.midiData[key] = velocity
 
     def close(self):
         """closes the midi input device"""
         if self.midiDevice is not None:
-            self.midiDevice.close()
+            try:
+                self.midiDevice.close()
+            except pygame.midi.MidiException as ex:
+                self.debug_log['midi'] = "error closing midi device: " + str(ex)

@@ -34,6 +34,15 @@ class DisplayRenderer:
         display_text = self.small_font.render(self.debug_log['midi'], True, (255, 255, 255), (0, 0, 0))
         display_rect = display_text.get_rect()
         self.display_buffer.blit(display_text, display_rect)
+        display_text = self.small_font.render("midi device connected: " + self.debug_log['midi_connected'], True,
+                                              (255, 255, 255), (0, 0, 0))
+        display_rect = display_text.get_rect()
+        display_rect = display_rect.move(0, 11)
+        self.display_buffer.blit(display_text, display_rect)
+        display_text = self.small_font.render(self.debug_log['midi_message'], True, (255, 255, 255), (0, 0, 0))
+        display_rect = display_text.get_rect()
+        display_rect = display_rect.move(0, 22)
+        self.display_buffer.blit(display_text, display_rect)
 
     def render_number(self, number, color=(255, 255, 255)):
         """renders a number in a large font in the center of the screen"""
