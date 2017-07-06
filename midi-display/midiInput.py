@@ -6,6 +6,9 @@ class MidiInput:
     """class for handling all the midi input data"""
 
     def __init__(self, debug_log=dict()):
+        """constructor
+        :param debug_log: dictionary to write log entries into
+        """
         self.debug_log = debug_log
         self.midiData = None
         self.connected = False
@@ -14,7 +17,9 @@ class MidiInput:
         self.clear_data()
 
     def open(self, device_id=-1):
-        """initializes the given midi input device or the standard device"""
+        """initializes the given midi input device or the standard device
+        :param device_id: the device_id of the midi input device to open, omit to use default device
+        """
         self.debug_log['midi'] = ""
         self.debug_log['midi_connected'] = ""
         self.debug_log['midi_message'] = ""
@@ -67,10 +72,17 @@ class MidiInput:
                         channel = (message[0][0][0] & 15) + 1
                         key = message[0][0][1]
                         velocity = message[0][0][2]
-                        self.debug_log['midi_message'] = ("last message: "
-                                                          "status: {}, channel: {}, key: {}, "
-                                                          "velocity: {}".format(status, channel, key, velocity))
-                        self.midiData[key] = velocity
+                        if status == 144:
+                            status_event = "keyOn"
+                            self.midiData[key] = velocity
+                        elif status == 128:
+                            status_event = "keyOff"
+                            self.midiData[key] = 0
+                        else:
+                            status_event = "none"
+                        self.debug_log['midi_message'] = ("last message: status {}, status_event {}, channel {}, "
+                                                          "key {}, velocity {}"
+                                                          .format(status, status_event, channel, key, velocity))
 
     def close(self):
         """closes the midi input device"""

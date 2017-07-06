@@ -5,6 +5,9 @@ class DisplayRenderer:
     """class to render generated number to the screen"""
     
     def __init__(self, debug_log=dict()):
+        """constructor
+        :param debug_log: dictionary to write log entries into
+        """
         self.debug_log = debug_log
         self.full_screen = False
         self.render_zero = False
@@ -15,7 +18,10 @@ class DisplayRenderer:
         self.display_height = 0
         
     def open(self, full_screen=False, render_zero=False):
-        """initializes the screen and render objects"""
+        """initializes the screen and render objects
+        :param full_screen: True to use full screen, False to use window
+        :param render_zero: True to render the number 0, False to render blank on 0
+        """
         self.debug_log['display'] = ""
         self.full_screen = full_screen
         self.render_zero = render_zero
@@ -45,7 +51,10 @@ class DisplayRenderer:
         self.display_buffer.blit(display_text, display_rect)
 
     def render_number(self, number, color=(255, 255, 255)):
-        """renders a number in a large font in the center of the screen"""
+        """renders a number in a large font in the center of the screen
+        :param number: the number to render
+        :param color: the color to render the number with
+        """
         if number != 0 or self.render_zero is True:
             display_text = self.big_font.render(str(number).zfill(5), True, color, (0, 0, 0))
             display_rect = display_text.get_rect()

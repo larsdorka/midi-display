@@ -11,12 +11,18 @@ class CodeGenerator:
     """class to generate numbers and colors from midi data"""
     
     def __init__(self, algorithm=Algorithm.DEFAULT):
+        """constructor
+        :param algorithm: select the algorithm from enum with which to generate the number
+        """
         self.algorithm = algorithm
         self.calculateColor = True
         self.counter = 0
 
     def calc_number(self, midi_data):
-        """calculates a number from the midi data using the set algorithm"""
+        """calculates a number from the midi data using the set algorithm
+        :param midi_data: midi data to generate number from
+        :return: number generated from midi data
+        """
         number = 0
         if self.algorithm == Algorithm.DEFAULT:
             for index in range(128):
@@ -31,7 +37,10 @@ class CodeGenerator:
         return number
 
     def calc_color(self, midi_data):
-        """calculates the text color from the midi data"""
+        """calculates the text color from the midi data
+        :param midi_data: midi data to render color from
+        :return: color calculated from midi data
+        """
         if self.calculateColor is False:
             return (255, 255, 255)
         color = 0
