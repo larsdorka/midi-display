@@ -1,10 +1,13 @@
-from enum import Enum, auto
+# from enum import Enum, auto
+from enum import Enum
 
 
 class Algorithm(Enum):
     """enum to contain all the possible generator algorithms"""
-    DEFAULT = auto()
-    COUNTER = auto()
+    # DEFAULT = auto()
+    # COUNTER = auto()
+    DEFAULT = 1
+    COUNTER = 2
 
 
 class CodeGenerator:
