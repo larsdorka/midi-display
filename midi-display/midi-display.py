@@ -8,11 +8,6 @@ import codeGenerator
 import displayRenderer
 import configuration
 
-# configuration constants
-FULL_SCREEN = False  # set to False to display in 1024/768 window
-MIDI_DEVICE_ID = -1  # set to -1 to use default device
-SHOW_DEBUG = True  # set to True to render debug info on the screen
-
 
 def terminate():
     """terminate the program"""
@@ -37,18 +32,19 @@ if __name__ == '__main__':
     configuration = configuration.Configuration(debug_log)
     configuration.load("config.json")
     display = displayRenderer.DisplayRenderer(debug_log)
-    display.open(FULL_SCREEN)
+    display.open(configuration.get_config("FULL_SCREEN"))
     midi = midiInput.MidiInput(debug_log)
-    midi.open(MIDI_DEVICE_ID)
+    midi.open(configuration.get_config("MIDI_DEVICE_ID"))
     codeGen = codeGenerator.CodeGenerator()
     # codeGen = codeGenerator.CodeGenerator(codeGenerator.Algorithm.COUNTER)
     number = 0
+    show_debug = configuration.get_config("SHOW_DEBUG")
     while True:
         time.sleep(0.1)
         check_for_quit()
         if midi.connected:
             midi.read_data()
-        if SHOW_DEBUG:
+        if show_debug:
             debug_log['midi_connected'] = str(midi.connected)
             display.render_state()
         number = codeGen.calc_number(midi.midi_data)
