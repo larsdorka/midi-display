@@ -32,13 +32,13 @@ if __name__ == '__main__':
     configuration = configuration.Configuration(debug_log)
     configuration.load("config.json")
     display = displayRenderer.DisplayRenderer(debug_log)
-    display.open(configuration.get_config("FULL_SCREEN"))
+    display.open(configuration.get_config('FULL_SCREEN'))
     midi = midiInput.MidiInput(debug_log)
-    midi.open(configuration.get_config("MIDI_DEVICE_ID"))
+    midi.open(configuration.get_config('MIDI_DEVICE_ID'))
     codeGen = codeGenerator.CodeGenerator()
     # codeGen = codeGenerator.CodeGenerator(codeGenerator.Algorithm.COUNTER)
     number = 0
-    show_debug = configuration.get_config("SHOW_DEBUG")
+    show_debug = configuration.get_config('SHOW_DEBUG')
     while True:
         time.sleep(0.1)
         check_for_quit()
