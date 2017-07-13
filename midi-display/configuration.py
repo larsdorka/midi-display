@@ -33,4 +33,8 @@ class Configuration:
         :return: the value of the config property
         """
         value = ""
+        try:
+            value = self.config_data[key]
+        except Exception:
+            self.debug_log['config'] = "error on reading config data: key {} not found".format(key)
         return value
