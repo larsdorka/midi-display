@@ -48,8 +48,8 @@ if __name__ == '__main__':
         if SHOW_DEBUG:
             debug_log['midi_connected'] = str(midi.connected)
             display.render_state()
-        number = codeGen.calc_number(midi.midiData)
-        number = codeGen.calc_number(midi.midiData)
-        display.render_number(number, codeGen.calc_color(midi.midiData))
+        number = codeGen.calc_number(midi.midi_data)
+        number = codeGen.calc_number(midi.midi_data)
+        display.render_number(number, codeGen.calc_color(midi.midi_data))
         # display.render_number(number)
         display.update()

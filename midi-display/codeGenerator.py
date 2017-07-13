@@ -18,7 +18,7 @@ class CodeGenerator:
         :param algorithm: select the algorithm from enum with which to generate the number
         """
         self.algorithm = algorithm
-        self.calculateColor = True
+        self.calculate_color = True
         self.counter = 0
 
     def calc_number(self, midi_data):
@@ -44,7 +44,7 @@ class CodeGenerator:
         :param midi_data: midi data to render color from
         :return: color calculated from midi data
         """
-        if self.calculateColor is False:
+        if self.calculate_color is False:
             return (255, 255, 255)
         color = 0
         key_counter = 0
