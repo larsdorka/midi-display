@@ -6,6 +6,7 @@ from pygame.locals import *
 import midiInput
 import codeGenerator
 import displayRenderer
+import configuration
 
 # configuration constants
 FULL_SCREEN = False  # set to False to display in 1024/768 window
@@ -33,6 +34,8 @@ def check_for_quit():
 if __name__ == '__main__':
     pygame.init()
     debug_log = dict()
+    configuration = configuration.Configuration(debug_log)
+    configuration.load("config.json")
     display = displayRenderer.DisplayRenderer(debug_log)
     display.open(FULL_SCREEN)
     midi = midiInput.MidiInput(debug_log)
