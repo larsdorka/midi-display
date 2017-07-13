@@ -9,6 +9,7 @@ class DisplayRenderer:
         :param debug_log: dictionary to write log entries into
         """
         self.debug_log = debug_log
+        self.debug_log['display'] = ""
         self.full_screen = False
         self.render_zero = False
         self.display_buffer = None
@@ -22,7 +23,6 @@ class DisplayRenderer:
         :param full_screen: True to use full screen, False to use window
         :param render_zero: True to render the number 0, False to render blank on 0
         """
-        self.debug_log['display'] = ""
         self.full_screen = full_screen
         self.render_zero = render_zero
         if self.full_screen:
@@ -37,6 +37,7 @@ class DisplayRenderer:
 
     def render_state(self):
         """renders connection and error messages as debug information"""
+
         display_text = self.small_font.render(self.debug_log['midi'], True, (255, 255, 255), (0, 0, 0))
         display_rect = display_text.get_rect()
         self.display_buffer.blit(display_text, display_rect)
@@ -48,6 +49,10 @@ class DisplayRenderer:
         display_text = self.small_font.render(self.debug_log['midi_message'], True, (255, 255, 255), (0, 0, 0))
         display_rect = display_text.get_rect()
         display_rect = display_rect.move(0, 22)
+        self.display_buffer.blit(display_text, display_rect)
+        display_text = self.small_font.render(self.debug_log['config'], True, (255, 255, 255), (0, 0, 0))
+        display_rect = display_text.get_rect()
+        display_rect = display_rect.move(0, 33)
         self.display_buffer.blit(display_text, display_rect)
 
     def render_number(self, number, color=(255, 255, 255)):

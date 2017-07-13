@@ -10,6 +10,9 @@ class MidiInput:
         :param debug_log: dictionary to write log entries into
         """
         self.debug_log = debug_log
+        self.debug_log['midi'] = ""
+        self.debug_log['midi_connected'] = ""
+        self.debug_log['midi_message'] = ""
         self.midi_data = None
         self.connected = False
         self.midi_device = None
@@ -20,9 +23,6 @@ class MidiInput:
         """initializes the given midi input device or the standard device
         :param device_id: the device_id of the midi input device to open, omit to use default device
         """
-        self.debug_log['midi'] = ""
-        self.debug_log['midi_connected'] = ""
-        self.debug_log['midi_message'] = ""
         if self.midi_device is not None:
             self.midi_device.close()
             self.midi_device = None
