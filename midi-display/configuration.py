@@ -4,6 +4,7 @@ import json
 # FULL_SCREEN = false   # set to false to display in 1024/768 window
 # MIDI_DEVICE_ID = -1   # set to -1 to use default device
 # SHOW_DEBUG = true     # set to true to render debug info on the screen
+# CHORD = [1, 4, 9]     # chord as list of keys to verify midi data against
 
 STD_CONFIG_DATA = {'FULL_SCREEN': False,
                    'MIDI_DEVICE_ID': -1,
