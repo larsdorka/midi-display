@@ -1,4 +1,5 @@
 import pygame
+import os
 
 
 class DisplayRenderer:
@@ -59,6 +60,10 @@ class DisplayRenderer:
         display_rect = display_text.get_rect()
         display_rect = display_rect.move(0, 44)
         self.display_buffer.blit(display_text, display_rect)
+        display_text = self.small_font.render(self.debug_log['display'], True, (255, 255, 255), (0, 0, 0))
+        display_rect = display_text.get_rect()
+        display_rect = display_rect.move(0, 55)
+        self.display_buffer.blit(display_text, display_rect)
 
     def render_number(self, number, color=(255, 255, 255)):
         """renders a number in a large font in the center of the screen
@@ -89,6 +94,23 @@ class DisplayRenderer:
             display_rect.center = (self.display_width // 2, self.display_height // 2)
             display_rect = display_rect.move(0, -150)
             self.display_buffer.blit(display_text, display_rect)
+
+    def render_note_image(self, note_name):
+        """renders an image below the center of the screen depending on the given note name
+        :param note_name: the name of the note to determine the file name
+        """
+        if note_name != "" and note_name != "INVALID" and note_name != "CORRECT":
+            display_image = None
+            filepath = "data/" + note_name + ".PNG"
+            try:
+                display_image = pygame.image.load(os.path.normpath(filepath))
+            except Exception as ex:
+                self.debug_log['display'] = "error opening image " + filepath + ": " + str(ex)
+            if display_image is not None:
+                display_rect = display_image.get_rect()
+                display_rect.center = (self.display_width // 2, self.display_height // 2)
+                display_rect = display_rect.move(0, 200)
+                self.display_buffer.blit(display_image, display_rect)
 
     def update(self):
         """updates the screen with the current buffer and clears the buffer"""

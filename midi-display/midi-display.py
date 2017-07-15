@@ -1,6 +1,7 @@
 import pygame
 import sys
 import time
+import os
 from pygame.locals import *
 
 import midiInput
@@ -30,7 +31,7 @@ if __name__ == '__main__':
     pygame.init()
     debug_log = dict()
     configuration = configuration.Configuration(debug_log)
-    configuration.load("config.json")
+    configuration.load(os.path.normpath("data/config.json"))
     display = displayRenderer.DisplayRenderer(debug_log)
     display.open(configuration.get_config('FULL_SCREEN'))
     midi = midiInput.MidiInput(debug_log)
@@ -55,4 +56,5 @@ if __name__ == '__main__':
         color = codeGen.calc_color(midi.midi_data)
         display.render_number(number, color)
         display.render_note_name(note_name, color)
+        display.render_note_image(note_name)
         display.update()
