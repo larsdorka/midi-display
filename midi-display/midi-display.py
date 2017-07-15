@@ -38,7 +38,10 @@ if __name__ == '__main__':
     codeGen = codeGenerator.CodeGenerator()
     # codeGen = codeGenerator.CodeGenerator(codeGenerator.Algorithm.COUNTER)
     number = 0
+    note_name = ""
+    color = None
     show_debug = configuration.get_config('SHOW_DEBUG')
+    chord = configuration.get_config('CHORD')
     while True:
         time.sleep(0.1)
         check_for_quit()
@@ -48,7 +51,8 @@ if __name__ == '__main__':
             debug_log['midi_connected'] = str(midi.connected)
             display.render_state()
         number = codeGen.calc_number(midi.midi_data)
-        number = codeGen.calc_number(midi.midi_data)
-        display.render_number(number, codeGen.calc_color(midi.midi_data))
-        # display.render_number(number)
+        note_name = codeGen.calc_note_name(midi.get_flat_midi_data(), chord)
+        color = codeGen.calc_color(midi.midi_data)
+        display.render_number(number, color)
+        display.render_note_name(note_name, color)
         display.update()

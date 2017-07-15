@@ -14,6 +14,7 @@ class DisplayRenderer:
         self.render_zero = False
         self.display_buffer = None
         self.big_font = None
+        self.medium_font = None
         self.small_font = None
         self.display_width = 0
         self.display_height = 0
@@ -32,6 +33,7 @@ class DisplayRenderer:
         self.display_width = self.display_buffer.get_width()
         self.display_height = self.display_buffer.get_height()
         self.big_font = pygame.font.Font('freesansbold.ttf', self.display_height // 5)
+        self.medium_font = pygame.font.Font('freesansbold.ttf', self.display_height // 10)
         self.small_font = pygame.font.Font('freesansbold.ttf', 11)
         self.display_buffer.fill((0, 0, 0))
 
@@ -45,13 +47,17 @@ class DisplayRenderer:
         display_rect = display_text.get_rect()
         display_rect = display_rect.move(0, 11)
         self.display_buffer.blit(display_text, display_rect)
-        display_text = self.small_font.render(self.debug_log['midi_message'], True, (255, 255, 255), (0, 0, 0))
+        display_text = self.small_font.render(self.debug_log['config_chord'], True, (255, 255, 255), (0, 0, 0))
         display_rect = display_text.get_rect()
         display_rect = display_rect.move(0, 22)
         self.display_buffer.blit(display_text, display_rect)
-        display_text = self.small_font.render(self.debug_log['config'], True, (255, 255, 255), (0, 0, 0))
+        display_text = self.small_font.render(self.debug_log['midi_message'], True, (255, 255, 255), (0, 0, 0))
         display_rect = display_text.get_rect()
         display_rect = display_rect.move(0, 33)
+        self.display_buffer.blit(display_text, display_rect)
+        display_text = self.small_font.render(self.debug_log['config'], True, (255, 255, 255), (0, 0, 0))
+        display_rect = display_text.get_rect()
+        display_rect = display_rect.move(0, 44)
         self.display_buffer.blit(display_text, display_rect)
 
     def render_number(self, number, color=(255, 255, 255)):
@@ -63,6 +69,25 @@ class DisplayRenderer:
             display_text = self.big_font.render(str(number).zfill(5), True, color, (0, 0, 0))
             display_rect = display_text.get_rect()
             display_rect.center = (self.display_width // 2, self.display_height // 2)
+            self.display_buffer.blit(display_text, display_rect)
+
+    def render_note_name(self, note_name, color=(255, 255, 255)):
+        """renders a note name string in a medium font above the center of the screen
+        :param note_name: the note name to render
+        :param color: the color to render the note name with
+        """
+        render_string = ""
+        if note_name == "INVALID":
+            render_string = "FAAAAALSCH"
+        elif note_name == "CORRECT":
+            render_string = "GEWONNEN!"
+        elif note_name != "":
+            render_string = "Dies ist ein " + note_name
+        if render_string != "":
+            display_text = self.medium_font.render(render_string, True, color, (0, 0, 0))
+            display_rect = display_text.get_rect()
+            display_rect.center = (self.display_width // 2, self.display_height // 2)
+            display_rect = display_rect.move(0, -150)
             self.display_buffer.blit(display_text, display_rect)
 
     def update(self):
