@@ -7,7 +7,8 @@ import json
 
 STD_CONFIG_DATA = {'FULL_SCREEN': False,
                    'MIDI_DEVICE_ID': -1,
-                   'SHOW_DEBUG': True}
+                   'SHOW_DEBUG': True,
+                   'CHORD': [1, 4, 9]}
 
 
 class Configuration:
@@ -19,6 +20,7 @@ class Configuration:
         """
         self.debug_log = debug_log
         self.debug_log['config'] = ""
+        self.debug_log['config_chord'] = ""
         self.config_data = None
         self.config_file_path = ""
 
@@ -42,6 +44,9 @@ class Configuration:
             self.config_data = {}
         if not self.config_data:
             self.create_std_config()
+        self.debug_log['config_chord'] = "solution chord:"
+        for key in self.config_data['CHORD']:
+            self.debug_log['config_chord'] += " " + str(key)
 
     def get_config(self, key=""):
         """returns the value for the given key from the configuration data
