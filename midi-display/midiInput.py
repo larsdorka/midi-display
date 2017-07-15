@@ -91,3 +91,13 @@ class MidiInput:
                 self.midi_device.close()
             except pygame.midi.MidiException as ex:
                 self.debug_log['midi'] = "error closing midi device: " + str(ex)
+
+    def get_flat_midi_data(self):
+        """generates a list of active notes flattened to one octave
+        :return: boolean list of active notes
+        """
+        midi_data_flat = [False] * 12
+        for index in range(len(self.midi_data)):
+            if self.midi_data[index] > 0:
+                midi_data_flat[index % 12] = True
+        return midi_data_flat
