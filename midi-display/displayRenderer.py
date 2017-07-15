@@ -95,9 +95,10 @@ class DisplayRenderer:
             display_rect = display_rect.move(0, -150)
             self.display_buffer.blit(display_text, display_rect)
 
-    def render_note_image(self, note_name):
+    def render_note_image(self, note_name, color=(255, 255, 255)):
         """renders an image below the center of the screen depending on the given note name
         :param note_name: the name of the note to determine the file name
+        :param color: the color to render the image in (alpha channel)
         """
         if note_name != "" and note_name != "INVALID" and note_name != "CORRECT":
             display_image = None
@@ -110,6 +111,7 @@ class DisplayRenderer:
                 display_rect = display_image.get_rect()
                 display_rect.center = (self.display_width // 2, self.display_height // 2)
                 display_rect = display_rect.move(0, 200)
+                display_image.set_alpha(color[0])
                 self.display_buffer.blit(display_image, display_rect)
 
     def update(self):

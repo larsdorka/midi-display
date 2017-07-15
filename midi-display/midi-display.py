@@ -56,5 +56,5 @@ if __name__ == '__main__':
         color = codeGen.calc_color(midi.midi_data)
         display.render_number(number, color)
         display.render_note_name(note_name, color)
-        display.render_note_image(note_name)
+        display.render_note_image(note_name, color)
         display.update()
