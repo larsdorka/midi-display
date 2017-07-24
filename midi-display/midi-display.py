@@ -27,6 +27,8 @@ def check_for_input():
             terminate()
         elif event.key == K_d:
             result = "debug"
+        elif event.key == K_f:
+            result = "fullscreen"
     return result
 
 
@@ -37,7 +39,8 @@ if __name__ == '__main__':
     configuration = configuration.Configuration(debug_log)
     configuration.load(os.path.normpath("data/config.json"))
     display = displayRenderer.DisplayRenderer(debug_log)
-    display.open(configuration.get_config('FULL_SCREEN'))
+    fullscreen = configuration.get_config('FULL_SCREEN')
+    display.open(fullscreen)
     midi = midiInput.MidiInput(debug_log)
     midi.open(configuration.get_config('MIDI_DEVICE_ID'))
     codeGen = codeGenerator.CodeGenerator()
@@ -52,6 +55,9 @@ if __name__ == '__main__':
         input_value = check_for_input()
         if input_value == "debug":
             show_debug = not show_debug
+        elif input_value == "fullscreen":
+            fullscreen = not fullscreen
+            display.open(fullscreen)
         if midi.connected:
             midi.read_data()
         if show_debug:
