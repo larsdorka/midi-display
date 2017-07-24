@@ -8,6 +8,7 @@ import midiInput
 import codeGenerator
 import displayRenderer
 import configuration
+import menuStructure
 
 
 def terminate():
@@ -29,6 +30,8 @@ def check_for_input():
             result = "debug"
         elif event.key == K_f:
             result = "fullscreen"
+        elif event.key == K_SPACE:
+            result = "menu"
     return result
 
 
@@ -38,7 +41,8 @@ if __name__ == '__main__':
     debug_log = dict()
     configuration = configuration.Configuration(debug_log)
     configuration.load(os.path.normpath("data/config.json"))
-    display = displayRenderer.DisplayRenderer(debug_log)
+    menu = menuStructure.MenuStructure()
+    display = displayRenderer.DisplayRenderer(debug_log, menu)
     fullscreen = configuration.get_config('FULL_SCREEN')
     display.open(fullscreen)
     midi = midiInput.MidiInput(debug_log)
@@ -58,6 +62,8 @@ if __name__ == '__main__':
         elif input_value == "fullscreen":
             fullscreen = not fullscreen
             display.open(fullscreen)
+        elif input_value == "menu":
+            menu.menu_active = not menu.menu_active
         if midi.connected:
             midi.read_data()
         if show_debug:

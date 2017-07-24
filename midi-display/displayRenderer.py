@@ -1,11 +1,12 @@
 import pygame
 import os
+import menuStructure
 
 
 class DisplayRenderer:
     """class to render generated number to the screen"""
 
-    def __init__(self, debug_log=dict()):
+    def __init__(self, menu: menuStructure.MenuStructure, debug_log=dict()):
         """constructor
         :param debug_log: dictionary to write log entries into
         """
@@ -19,6 +20,7 @@ class DisplayRenderer:
         self.small_font = None
         self.display_width = 0
         self.display_height = 0
+        self.menu = menu
 
     def open(self, full_screen=False, render_zero=False):
         """initializes the screen and render objects
