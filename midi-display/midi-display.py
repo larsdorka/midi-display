@@ -17,13 +17,17 @@ def terminate():
     sys.exit()
 
 
-def check_for_quit():
+def check_for_input():
     """process termination request"""
+    result = ""
     for event in pygame.event.get(QUIT):
         terminate()
     for event in pygame.event.get(KEYUP):
         if event.key == K_ESCAPE:
             terminate()
+        elif event.key == K_d:
+            result = "debug"
+    return result
 
 
 # main application loop
@@ -45,7 +49,9 @@ if __name__ == '__main__':
     chord = configuration.get_config('CHORD')
     while True:
         time.sleep(0.1)
-        check_for_quit()
+        input_value = check_for_input()
+        if input_value == "debug":
+            show_debug = not show_debug
         if midi.connected:
             midi.read_data()
         if show_debug:
