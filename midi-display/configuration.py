@@ -61,12 +61,25 @@ class Configuration:
             self.debug_log['config'] = "error on reading config data: key {} not found".format(key)
         return value
 
+    def set_config(self, key, value=""):
+        """sets a given key/value pair into the configuration data
+        :param key: the key to the config property
+        :param value: the value to the config property
+        """
+        if key != "":
+            self.config_data[key] = value
+
+    def save(self):
+        """encodes the json content and saves the configuration file"""
+        if self.config_file_path != "":
+            json_config = json.dumps(self.config_data, indent=2)
+            with open(self.config_file_path, 'w', encoding='utf-8') as file:
+                try:
+                    file.write(json_config)
+                except Exception as ex:
+                    self.debug_log['config'] = "error on writing config data: " + str(ex)
+
     def create_std_config(self):
         """creates the standard configuration and stores it to a file"""
         self.config_data = STD_CONFIG_DATA
-        json_config = json.dumps(self.config_data, indent=2)
-        with open(self.config_file_path, 'w', encoding='utf-8') as file:
-            try:
-                file.write(json_config)
-            except Exception as ex:
-                self.debug_log['config'] = "error on writing config data: " + str(ex)
+        self.save()
