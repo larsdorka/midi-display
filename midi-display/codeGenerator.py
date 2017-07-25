@@ -1,13 +1,10 @@
-# from enum import Enum, auto
+from enum import Enum
 
 NOTE_NAMES = ["C", "Cis", "D", "Dis", "E", "F", "Fis", "G", "Gis", "A", "B", "H"]
 
 
-# class Algorithm(Enum):
-class Algorithm:
+class Algorithm(Enum):
     """enum to contain all the possible generator algorithms"""
-    # DEFAULT = auto()
-    # COUNTER = auto()
     DEFAULT = 1
     COUNTER = 2
 

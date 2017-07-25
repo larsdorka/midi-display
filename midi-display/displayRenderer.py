@@ -1,12 +1,11 @@
 import pygame
 import os
-import menuStructure
 
 
 class DisplayRenderer:
     """class to render generated number to the screen"""
 
-    def __init__(self, menu: menuStructure.MenuStructure, debug_log=dict()):
+    def __init__(self, debug_log=dict()):
         """constructor
         :param debug_log: dictionary to write log entries into
         """
@@ -20,7 +19,6 @@ class DisplayRenderer:
         self.small_font = None
         self.display_width = 0
         self.display_height = 0
-        self.menu = menu
 
     def open(self, full_screen=False, render_zero=False):
         """initializes the screen and render objects
@@ -66,6 +64,16 @@ class DisplayRenderer:
         display_rect = display_text.get_rect()
         display_rect = display_rect.move(0, 55)
         self.display_buffer.blit(display_text, display_rect)
+
+    def render_menu(self, menu_page=list()):
+        """renders a single menu screen
+        :param menu_page: the menu screen to render as a list of strings
+        """
+        for line in range(len(menu_page)):
+            display_text = self.small_font.render(menu_page[line], True, (255, 255, 255), (0, 0, 0))
+            display_rect = display_text.get_rect()
+            display_rect = display_rect.move(0, 11 * line)
+            self.display_buffer.blit(display_text, display_rect)
 
     def render_number(self, number, color=(255, 255, 255)):
         """renders a number in a large font in the center of the screen
