@@ -21,8 +21,7 @@ class MidiInput:
         self.midi_device_list = list()
         for index in range(pygame.midi.get_count()):
             info = pygame.midi.get_device_info(index)
-            if info[2] == "1":
-                self.midi_device_list.append(info)
+            self.midi_device_list.append(info)
 
     def open(self, device_id=-1):
         """initializes the given midi input device or the standard device
