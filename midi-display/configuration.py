@@ -61,7 +61,7 @@ class Configuration:
             self.debug_log['config'] = "error on reading config data: key {} not found".format(key)
         return value
 
-    def set_config(self, key, value=""):
+    def set_config(self, key, value):
         """sets a given key/value pair into the configuration data
         :param key: the key to the config property
         :param value: the value to the config property
