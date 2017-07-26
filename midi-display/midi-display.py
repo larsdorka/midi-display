@@ -36,7 +36,7 @@ def terminate():
 def check_for_input():
     """process termination request"""
     result = ""
-    for event in pygame.event.get(QUIT):
+    for _ in pygame.event.get(QUIT):
         terminate()
     for event in pygame.event.get(KEYUP):
         if event.key == K_ESCAPE:
@@ -98,19 +98,18 @@ def format_midi_menu(device_list):
 if __name__ == '__main__':
     pygame.init()
     debug_log = dict()
-    configuration = configuration.Configuration(debug_log)
-    configuration.load(os.path.normpath("data/config.json"))
+    config = configuration.Configuration(debug_log)
+    config.load(os.path.normpath("data/config.json"))
     display = displayRenderer.DisplayRenderer(debug_log)
-    fullscreen = configuration.get_config('FULL_SCREEN')
-    set_fullscreen = fullscreen
-    show_debug = configuration.get_config('SHOW_DEBUG')
-    chord = configuration.get_config('CHORD')
+    # fullscreen = configuration.get_config('FULL_SCREEN')
+    # show_debug = configuration.get_config('SHOW_DEBUG')
+    chord = config.get_config('CHORD')
     show_menu = False
     menu_select = 0
-    menu_page = format_main_menu(set_fullscreen, show_debug)
-    display.open(fullscreen)
+    menu_page = format_main_menu(config.get_config('FULL_SCREEN'), config.get_config('SHOW_DEBUG'))
+    display.open(config.get_config('FULL_SCREEN'))
     midi = midiInput.MidiInput(debug_log)
-    midi.open(configuration.get_config('MIDI_DEVICE_ID'))
+    midi.open(config.get_config('MIDI_DEVICE_ID'))
     codeGen = codeGenerator.CodeGenerator()
     number = 0
     note_name = ""
@@ -123,40 +122,36 @@ if __name__ == '__main__':
                 input_value = ""
                 menu_select = 0
                 show_menu = True
-                menu_page = format_main_menu(set_fullscreen, show_debug)
+                menu_page = format_main_menu(config.get_config('FULL_SCREEN'), config.get_config('SHOW_DEBUG'))
         if show_menu:
             if menu_select == 0:
                 if input_value == "menu":
                     show_menu = False
-                    if fullscreen != set_fullscreen:
-                        fullscreen = set_fullscreen
-                        display.open(fullscreen)
                 elif input_value == "1":
                     menu_select = 1
                     menu_page = format_midi_menu(midi.midi_device_list)
                 elif input_value == "2":
-                    set_fullscreen = not set_fullscreen
-                    configuration.set_config('FULL_SCREEN', set_fullscreen)
-                    menu_page = format_main_menu(set_fullscreen, show_debug)
+                    config.set_config('FULL_SCREEN', not config.get_config('FULL_SCREEN'))
+                    display.open(config.get_config('FULL_SCREEN'))
+                    menu_page = format_main_menu(config.get_config('FULL_SCREEN'), config.get_config('SHOW_DEBUG'))
                 elif input_value == "3":
-                    show_debug = not show_debug
-                    configuration.set_config('SHOW_DEBUG', show_debug)
-                    menu_page = format_main_menu(set_fullscreen, show_debug)
+                    config.set_config('SHOW_DEBUG', not config.get_config('SHOW_DEBUG'))
+                    menu_page = format_main_menu(config.get_config('FULL_SCREEN'), config.get_config('SHOW_DEBUG'))
                 elif input_value == "S":
-                    configuration.save()
+                    config.save()
                 elif input_value == "X":
                     terminate()
             elif menu_select == 1:
                 if input_value == "menu":
                     menu_select = 0
-                    menu_page = format_main_menu(set_fullscreen, show_debug)
+                    menu_page = format_main_menu(config.get_config('FULL_SCREEN'), config.get_config('SHOW_DEBUG'))
                 elif input_value in ["1", "2", "3", "4", "5", "6", "7", "8", "9"]:
                     index = int(input_value)
                     if midi.midi_device_list[index][2] == 1:
-                        configuration.set_config('MIDI_DEVICE_ID', index)
+                        config.set_config('MIDI_DEVICE_ID', index)
                         midi.open(index)
             display.render_menu(menu_page)
-        elif show_debug:
+        elif config.get_config('SHOW_DEBUG'):
             debug_log['midi_connected'] = str(midi.connected)
             display.render_state()
         if midi.connected:
